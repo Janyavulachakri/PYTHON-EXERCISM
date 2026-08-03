@@ -2,3 +2,9 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# Ignore Exercism metadata and helper files
+**/.exercism/
+**/*_test.py
+**/HELP.md
+**/HINTS.md
