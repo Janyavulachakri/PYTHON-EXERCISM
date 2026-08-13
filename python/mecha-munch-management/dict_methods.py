@@ -12,7 +12,12 @@ def add_item(current_cart, items_to_add):
         dict: The updated user cart dictionary.
     """
 
-    pass
+    for item in items_to_add:
+        if item in current_cart:
+            current_cart[item]+=1
+        else:
+            current_cart[item]=1
+    return current_cart
 
 
 def read_notes(notes):
@@ -25,7 +30,14 @@ def read_notes(notes):
         dict: A user shopping cart dictionary.
     """
 
-    pass
+    dict_notes = {}
+    for item in notes:
+        if item in dict_notes:
+            dict_notes[item] += 1
+        else:
+            dict_notes[item] = 1
+
+    return dict_notes
 
 
 def update_recipes(ideas, recipe_updates):
@@ -39,7 +51,8 @@ def update_recipes(ideas, recipe_updates):
         dict: The updated "recipe ideas" dict.
     """
 
-    pass
+    ideas.update(recipe_updates)
+    return ideas
 
 
 def sort_entries(cart):
@@ -52,7 +65,9 @@ def sort_entries(cart):
         dict: A user's shopping cart sorted in alphabetical order.
     """
 
-    pass
+    sorted_cart = dict(sorted(cart.items()))
+    return sorted_cart
+    
 
 
 def send_to_store(cart, aisle_mapping):
@@ -65,8 +80,16 @@ def send_to_store(cart, aisle_mapping):
     Returns:
         dict: The fulfillment dictionary ready to send to store.
     """
+    fulfillment_cart = {}
 
-    pass
+    for item, quantity in cart.items():
+        aisle_info = aisle_mapping[item]  # e.g. ['Aisle 5', False]
+        fulfillment_cart[item] = [quantity] + aisle_info  # e.g. [3, 'Aisle 5', False]
+
+    # Sort keys in reverse alphabetical order
+    return dict(sorted(fulfillment_cart.items(), reverse=True))
+
+    
 
 
 def update_store_inventory(fulfillment_cart, store_inventory):
@@ -79,5 +102,16 @@ def update_store_inventory(fulfillment_cart, store_inventory):
     Returns:
         dict: The store_inventory updated.
     """
+    for item, data in fulfillment_cart.items():
+        ordered_qty = data[0]
+        current_stock = store_inventory[item][0]
+        
+        new_stock = current_stock - ordered_qty
+        
+        if new_stock <= 0:
+            store_inventory[item][0] = 'Out of Stock'
+        else:
+            store_inventory[item][0] = new_stock
 
-    pass
+    return store_inventory
+    
